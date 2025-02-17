@@ -33,24 +33,26 @@ while True:
     elif escolha == 's' or escolha == 'S':
         if quantidade_saques != SAQUES_DIARIO:
             saque = input("Insira o valor a ser sacado: ")
-            if saque.isnumeric():
-                saque = float(saque)
+            try:
+                saque = float(saque.replace(',', '.'))  
                 if saque > saldo:
                     print("Você não tem saldo para sacar essa quantidade")
-                    print(f"Seu saldo é {saldo}")
+                    print(f"Seu saldo é R$ {saldo:.2f}")
                 elif saque <= 0:
                     print("Você não pode sacar esse valor")
-                elif SAQUES_DIARIO != 0:
-                    if saque <= 500:
-                        saldo -= saque
-                        extrato += f"Saque: R$ {saque:.2f}\n"
-                        quantidade_saques += 1
-                    else:
-                        print("Só é permitido sacar 500 reais por vez.")
-            else:
-                print("Insira um valor a ser sacado.")
+                elif saque > 500:
+                    print("Só é permitido sacar 500 reais por vez.")
+                else:
+                    saldo -= saque
+                    extrato += f"Saque: R$ {saque:.2f}\n"
+                    quantidade_saques += 1
+                    print(f"Saque de R$ {saque:.2f} realizado com sucesso!")
+            except ValueError:
+                print("Valor inválido. Insira um valor numérico.")
         else:
             print("Limite de saques diários atingido.")
+
+            
     elif escolha == 'e' or escolha == 'E':
         print("\n EXTRATO ")
         print("Não foram realizadas movimentações." if not extrato else extrato) 
